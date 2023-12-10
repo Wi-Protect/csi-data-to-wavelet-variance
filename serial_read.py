@@ -49,16 +49,26 @@ csi_data_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
 
 
-def csi_data_read_parse(port: str):
-    ser = serial.Serial(port=port, baudrate=921600,
-                        bytesize=8, parity='N', stopbits=1)
-    if ser.isOpen():
-        print("open success")
-    else:
-        print("open failed")
-        return
+SERIAL_PORT = "COM3"
 
-    while True:
+ser = serial.Serial(port=SERIAL_PORT, baudrate=921600,
+                    bytesize=8, parity='N', stopbits=1)
+
+serial_open = False
+
+if ser.isOpen():
+    print("open success")
+    serial_open = True
+else:
+    print("open failed")
+
+
+def csi_data_read_parse():
+    count = 0
+
+    csi_list = []
+
+    while serial_open and count < 200:
         strings = str(ser.readline())
         if not strings:
             break
@@ -91,7 +101,7 @@ def csi_data_read_parse(port: str):
         amplitudes = []
         phases = []
 
-        print(csi_raw_data[0])
+        # print(csi_raw_data[0])
 
         for i in range(len(csi_raw_data)):
             if i % 2 == 0:
@@ -104,18 +114,21 @@ def csi_data_read_parse(port: str):
             amplitudes.append(sqrt(imaginary[i] ** 2 + real[i] ** 2))
             phases.append(atan2(imaginary[i], real[i]))
 
-        print([csi_data[1]] + amplitudes+phases)
+        # print([csi_data[1]] + amplitudes+phases)
+        csi_list.append([csi_data[1]] + amplitudes+phases)
+        count += 1
+        print(count)
 
-    ser.close()
-    return
+    # ser.close()
+    return csi_list
 
 
-serial_port = "COM3"
-csv_file_name = "csi_data.csv"
+# serial_port = "COM3"
+# csv_file_name = "csi_data.csv"
 
 # with open(csv_file_name, 'w', newline='') as csv_file:
 #     csv_writer = csv.writer(csv_file)
 #     csv_writer.writerow(AMP_AND_PHASE_COLUMNS_NAMES)
 #     csi_data_read_parse(serial_port, csv_writer)
 
-csi_data_read_parse(serial_port)
+# print(csi_data_read_parse())
