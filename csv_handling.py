@@ -7,7 +7,7 @@ CSV_HEADERS = ["amplitude1", "phase1", "amplicude2", "phase2", "amplitude3", "ph
 
 file = open("wavelet_test.csv", "w")
 
-writer = csv.writer(file)
+writer = csv.writer(file, lineterminator='\n')
 
 writer.writerow(CSV_HEADERS)
 
