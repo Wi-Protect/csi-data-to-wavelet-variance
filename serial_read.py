@@ -66,7 +66,7 @@ else:
 def csi_data_read_parse():
     count = 0
 
-    csi_list = []
+    csi_list = np.zeros((1, 129))
 
     while serial_open and count < 200:
         strings = str(ser.readline())
@@ -115,11 +115,15 @@ def csi_data_read_parse():
             phases.append(atan2(imaginary[i], real[i]))
 
         # print([csi_data[1]] + amplitudes+phases)
-        csi_list.append([csi_data[1]] + amplitudes+phases)
+        # csi_list.append([csi_data[1]] + amplitudes+phases)
+        csi_list = np.vstack([csi_list, [csi_data[1]] + amplitudes+phases])
         count += 1
         print(count)
 
     # ser.close()
+
+    csi_list = np.delete(csi_list, np.s_[:1], axis=0)
+
     return csi_list
 
 
@@ -132,3 +136,8 @@ def csi_data_read_parse():
 #     csi_data_read_parse(serial_port, csv_writer)
 
 # print(csi_data_read_parse())
+
+# matrix = csi_data_read_parse()
+# a = matrix[:, 1].tolist()
+# a = [float(i) for i in a]
+# print(type(a[0]))
