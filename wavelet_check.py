@@ -23,8 +23,11 @@ def calculate_wavelet_variance(csi):
         amplitude_variances = [np.var(coeff) for coeff in amplitude_coeffs]
         phase_variances = [np.var(coeff) for coeff in phase_coeffs]
 
-        variances.append(
-            [np.sum(amplitude_variances), np.sum(phase_variances)])
+        # variances.append(
+        # [np.sum(amplitude_variances), np.sum(phase_variances)])
+
+        variances.append(np.sum(amplitude_variances))
+        variances.append(np.sum(phase_variances))
 
     return variances
 
