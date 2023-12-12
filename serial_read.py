@@ -68,7 +68,7 @@ def csi_data_read_parse():
 
     csi_list = np.zeros((1, 129))
 
-    while serial_open and count < 200:
+    while serial_open and count < 500:
         strings = str(ser.readline())
         if not strings:
             break
