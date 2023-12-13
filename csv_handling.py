@@ -11,10 +11,15 @@ writer = csv.writer(file, lineterminator='\n')
 
 writer.writerow(CSV_HEADERS)
 
+file.close()
+
 
 def write_to_csv(data, activityNum=0):
+    f = open("wavelet_test.csv", "a")
+    w = csv.writer(f, lineterminator='\n')
     data.append(activityNum)
-    writer.writerow(data)
+    w.writerow(data)
+    f.close()
 
 
 # file.close()

@@ -118,7 +118,7 @@ def csi_data_read_parse():
         # csi_list.append([csi_data[1]] + amplitudes+phases)
         csi_list = np.vstack([csi_list, [csi_data[1]] + amplitudes+phases])
         count += 1
-        print(count)
+        # print(count)
 
     # ser.close()
 
