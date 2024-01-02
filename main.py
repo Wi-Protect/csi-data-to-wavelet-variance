@@ -1,3 +1,4 @@
+import time
 from csv_handling import write_to_csv
 from serial_read import csi_data_read_parse
 from wavelet_check import calculate_wavelet_variance
@@ -6,15 +7,17 @@ from wavelet_check import calculate_wavelet_variance
 
 NORMAL = 0
 WALKING = 1
-RUNNING = 2
-BENDING = 3
+BENDING = 2
+CRAWLING = 3
+
+# time.sleep(60)
 
 
 while True:
     csi_data = csi_data_read_parse()
     wavelet_variances = calculate_wavelet_variance(csi_data)
 
-    write_to_csv(wavelet_variances, NORMAL)
+    write_to_csv(wavelet_variances, CRAWLING)
 
     print(wavelet_variances)
 
