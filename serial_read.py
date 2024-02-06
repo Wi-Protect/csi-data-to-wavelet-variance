@@ -49,7 +49,7 @@ csi_data_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
 
 
-SERIAL_PORT = "COM3"
+SERIAL_PORT = "/dev/cu.usbserial-0001"
 
 ser = serial.Serial(port=SERIAL_PORT, baudrate=921600,
                     bytesize=8, parity='N', stopbits=1)
