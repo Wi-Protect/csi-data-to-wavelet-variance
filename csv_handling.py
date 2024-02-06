@@ -5,13 +5,13 @@ CSV_HEADERS = ["amplitude1", "phase1", "amplicude2", "phase2", "amplitude3", "ph
                "amplitude33", "phase33", "amplitude34", "phase34", "amplitude35", "phase35", "amplitude36", "phase36", "amplitude37", "phase37", "amplitude38", "phase38", "amplitude39", "phase39", "amplitude40", "phase40", "amplitude41", "phase41", "amplitude42", "phase42", "amplitude43", "phase43", "amplitude44", "phase44", "amplitude45", "phase45", "amplitude46", "phase46", "amplitude47", "phase47", "amplitude48", "phase48", "amplitude49", "phase49", "amplitude50", "phase50", "amplitude51", "phase51", "amplitude52", "phase52", "amplitude53", "phase53", "amplitude54", "phase54", "amplitude55", "phase55", "amplitude56", "phase56", "amplitude57", "phase57", "amplitude58", "phase58", "amplitude59", "phase59", "amplitude60", "phase60", "amplitude61", "phase61", "amplitude62", "phase62", "amplitude63", "phase63", "amplitude64", "phase64", "activity"]
 
 
-file = open("wavelet_test.csv", "w")
+# file = open("wavelet_test.csv", "w")
 
-writer = csv.writer(file, lineterminator='\n')
+# writer = csv.writer(file, lineterminator='\n')
 
-writer.writerow(CSV_HEADERS)
+# writer.writerow(CSV_HEADERS)
 
-file.close()
+# file.close()
 
 
 def write_to_csv(data, activityNum=0):

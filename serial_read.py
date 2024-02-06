@@ -51,25 +51,24 @@ csi_data_array = np.zeros(
 
 SERIAL_PORT = "/dev/cu.usbserial-0001"
 
-ser = serial.Serial(port=SERIAL_PORT, baudrate=921600,
-                    bytesize=8, parity='N', stopbits=1)
-
-serial_open = False
-
-if ser.isOpen():
-    print("open success")
-    serial_open = True
-else:
-    print("open failed")
-
 
 def csi_data_read_parse():
+
+    ser = serial.Serial(port=SERIAL_PORT, baudrate=921600,
+                        bytesize=8, parity='N', stopbits=1)
+
+    if ser.isOpen():
+        print("open success")
+    else:
+        print("open failed")
+
     count = 0
 
     csi_list = np.zeros((1, 129))
 
-    while serial_open and count < 500:
+    while count < 500:
         strings = str(ser.readline())
+        # print(strings)
         if not strings:
             break
 
