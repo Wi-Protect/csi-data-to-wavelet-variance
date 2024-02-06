@@ -68,6 +68,7 @@ def csi_data_read_parse():
 
     while count < 500:
         strings = str(ser.readline())
+        # print(strings)
         if not strings:
             break
 
