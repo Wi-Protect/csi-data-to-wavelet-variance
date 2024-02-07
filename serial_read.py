@@ -50,8 +50,8 @@ csi_data_array = np.zeros(
     [CSI_DATA_INDEX, CSI_DATA_COLUMNS], dtype=np.complex64)
 
 
-SERIAL_PORT_1 = "COM3"
-SERIAL_PORT_2 = "COM7"
+SERIAL_PORT_1 = "/dev/cu.usbserial-0001	"
+SERIAL_PORT_2 = "/dev/cu.usbserial-6"
 
 
 def csi_data_read_parse(ser1, ser2):
