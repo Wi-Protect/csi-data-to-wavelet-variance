@@ -70,7 +70,7 @@ def csi_data_read_parse(ser1, ser2):
 
     csi_list = np.zeros((1, 260))
 
-    while count < 20:
+    while count < 200:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
         # print(strings)
