@@ -54,13 +54,7 @@ SERIAL_PORT_1 = "COM3"
 SERIAL_PORT_2 = "COM7"
 
 
-def csi_data_read_parse():
-
-    ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
-
-    ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
+def csi_data_read_parse(ser1, ser2):
 
     if ser1.isOpen():
         print("open success SER 1")
@@ -76,7 +70,7 @@ def csi_data_read_parse():
 
     csi_list = np.zeros((1, 260))
 
-    while count < 500:
+    while count < 200:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
         # print(strings)
@@ -158,9 +152,6 @@ def csi_data_read_parse():
             [csi_list, [csi_data1[1]] + [time_string] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]]])
         count += 1
         # print(count)
-
-    ser1.close()
-    ser2.close()
 
     csi_list = np.delete(csi_list, np.s_[:1], axis=0)
 
