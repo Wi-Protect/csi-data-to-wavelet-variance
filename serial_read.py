@@ -51,10 +51,17 @@ csi_data_array = np.zeros(
 
 
 SERIAL_PORT_1 = "COM3"
-SERIAL_PORT_2 = "COM7"
+SERIAL_PORT_2 = "COM5"
 
 
-def csi_data_read_parse(ser1, ser2):
+ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
+                     bytesize=8, parity='N', stopbits=1)
+
+ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
+                     bytesize=8, parity='N', stopbits=1)
+
+
+def csi_data_read_parse():
 
     if ser1.isOpen():
         print("open success SER 1")
@@ -70,7 +77,7 @@ def csi_data_read_parse(ser1, ser2):
 
     csi_list = np.zeros((1, 260))
 
-    while count < 200:
+    while count < 20:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
         # print(strings)
