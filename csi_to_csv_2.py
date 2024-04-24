@@ -58,7 +58,7 @@ AMP_AND_PHASE_COLUMNS_NAMES = ['id', 'time', 'amplitude1_1', 'amplitude2_1', 'am
                                'phase64_1', 'amplitude1_2', 'amplitude2_2', 'amplitude3_2', 'amplitude4_2', 'amplitude5_2', 'amplitude6_2', 'amplitude7_2', 'amplitude8_2', 'amplitude9_2', 'amplitude10_2', 'amplitude11_2', 'amplitude12_2', 'amplitude13_2', 'amplitude14_2', 'amplitude15_2', 'amplitude16_2', 'amplitude17_2', 'amplitude18_2', 'amplitude19_2', 'amplitude20_2', 'amplitude21_2', 'amplitude22_2', 'amplitude23_2', 'amplitude24_2', 'amplitude25_2', 'amplitude26_2', 'amplitude27_2', 'amplitude28_2', 'amplitude29_2', 'amplitude30_2', 'amplitude31_2', 'amplitude32_2', 'amplitude33_2', 'amplitude34_2', 'amplitude35_2', 'amplitude36_2', 'amplitude37_2', 'amplitude38_2', 'amplitude39_2', 'amplitude40_2', 'amplitude41_2', 'amplitude42_2', 'amplitude43_2', 'amplitude44_2', 'amplitude45_2', 'amplitude46_2', 'amplitude47_2', 'amplitude48_2', 'amplitude49_2', 'amplitude50_2', 'amplitude51_2', 'amplitude52_2', 'amplitude53_2', 'amplitude54_2', 'amplitude55_2', 'amplitude56_2', 'amplitude57_2', 'amplitude58_2', 'amplitude59_2', 'amplitude60_2', 'amplitude61_2', 'amplitude62_2', 'amplitude63_2', 'amplitude64_2', 'phase1_2', 'phase2_2', 'phase3_2', 'phase4_2', 'phase5_2', 'phase6_2', 'phase7_2', 'phase8_2', 'phase9_2', 'phase10_2', 'phase11_2', 'phase12_2', 'phase13_2', 'phase14_2', 'phase15_2', 'phase16_2', 'phase17_2', 'phase18_2', 'phase19_2', 'phase20_2', 'phase21_2', 'phase22_2', 'phase23_2', 'phase24_2', 'phase25_2', 'phase26_2', 'phase27_2', 'phase28_2', 'phase29_2', 'phase30_2', 'phase31_2', 'phase32_2', 'phase33_2', 'phase34_2', 'phase35_2', 'phase36_2', 'phase37_2', 'phase38_2', 'phase39_2', 'phase40_2', 'phase41_2', 'phase42_2', 'phase43_2', 'phase44_2', 'phase45_2', 'phase46_2', 'phase47_2', 'phase48_2', 'phase49_2', 'phase50_2', 'phase51_2', 'phase52_2', 'phase53_2', 'phase54_2', 'phase55_2', 'phase56_2', 'phase57_2', 'phase58_2', 'phase59_2', 'phase60_2', 'phase61_2', 'phase62_2', 'phase63_2', 'phase64_2', 'rssi_1', 'rssi_2', 'activity']
 
 
-file = open("csi_data_new.csv", "w")
+file = open("wakeup-lahiru.csv", "w")
 
 writer = csv.writer(file, lineterminator='\n')
 
@@ -66,16 +66,10 @@ writer.writerow(AMP_AND_PHASE_COLUMNS_NAMES)
 
 file.close()
 
-time.sleep(5)
-
-ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                     bytesize=8, parity='N', stopbits=1)
-
-ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                     bytesize=8, parity='N', stopbits=1)
+# time.sleep(5)
 
 
-def csi_data_read_parse():
+def csi_data_read_parse(ser1, ser2, activty=0):
 
     if ser1.isOpen():
         print("open success SER 1")
@@ -89,14 +83,14 @@ def csi_data_read_parse():
 
     count = 0
 
-    csi_list = np.zeros((1, 260))
+    csi_list = np.zeros((1, 261))
 
-    while count < 100:
+    while count < 200:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
         # print(strings)
         if not strings1 or not strings2:
-            break
+            continue
 
         strings1 = strings1.lstrip('b\'').rstrip('\\r\\n\'')
         strings2 = strings2.lstrip('b\'').rstrip('\\r\\n\'')
@@ -170,7 +164,7 @@ def csi_data_read_parse():
         time_string = now.strftime("%H:%M:%S")
 
         csi_list = np.vstack(
-            [csi_list, [csi_data1[1]] + [time_string] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]]])
+            [csi_list, [csi_data1[1]] + [time_string] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]] + [activty]])
         count += 1
         # print(count)
 
@@ -179,21 +173,37 @@ def csi_data_read_parse():
     return csi_list
 
 
+STATIC = 0
+WALKING = 1
+BENDING = 2
+CRAWLING = 3
+SLEEPING = 4
+WAKEUP = 5
+
+
 while True:
 
-    try:
-        f = open("csi_data_new.csv", "a")
-        w = csv.writer(f, lineterminator='\n')
+    # try:
+    ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
+                         bytesize=8, parity='N', stopbits=1)
 
-        csi_data = csi_data_read_parse()
+    ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
+                         bytesize=8, parity='N', stopbits=1)
+    f = open("wakeup-lahiru.csv", "a")
+    w = csv.writer(f, lineterminator='\n')
 
-        w.writerows(csi_data)
-        f.close()
-        print("Data Written")
+    csi_data = csi_data_read_parse(ser1, ser2, WAKEUP)
 
-    except:
-        print("Error", datetime.now())
-        continue
+    w.writerows(csi_data)
+    f.close()
+
+    print("Data Written")
+    ser2.close()
+    ser1.close()
+
+    # except:
+    #     print("Error", datetime.now())
+    #     continue
 
     # csi_data = csi_data_read_parse()
     # f = open("csi_data_new.csv", "a")
